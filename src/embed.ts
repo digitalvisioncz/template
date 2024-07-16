@@ -1,4 +1,4 @@
-import config from './config/app';
+import config from './configs/app';
 
 const initApp = () => {
     const currentScriptElement = document.querySelector(`script[data-lego-app-id="${config.embed.id}"]`);

@@ -26,7 +26,7 @@ const removeScriptsFromHead = (env: Env) => {
                 )
                 .replace(
                     /<\/body>/g,
-                    `\t<script type="module" data-lego-app-id="${env.VITE_APP_ID}" src="/embed.js"></script>\n\t</body>`,
+                    env.PROD ? `\t<script type="module" data-lego-app-id="${env.VITE_APP_ID}" src="/embed.js"></script>\n\t</body>` : '\n\t</body>',
                 );
         },
     };
