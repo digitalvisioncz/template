@@ -3336,6 +3336,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     typescript: "npm:^5.5.3"
     typescript-plugin-css-modules: "npm:^5.1.0"
+    valibot: "npm:^0.36.0"
     vite: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -5225,6 +5226,13 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 10c0/41a5bdd214df2f6c3ecf8622745e4a366c4adced864bc3c833739791aeeeb1838119af7daed4ba36428114b5c67dcda034a79c882e97e43c03e66a4dd7389942
+  languageName: node
+  linkType: hard
+
+"valibot@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "valibot@npm:0.36.0"
+  checksum: 10c0/deff84cdcdc324d5010c2087e553cd26b07752ac18912c9152eccd241b507a49a9ad77fed57501d45bcbef9bec6a7a6707b17d9bef8d35e681d45f098a70e466
   languageName: node
   linkType: hard
 

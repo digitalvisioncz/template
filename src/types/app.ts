@@ -1,7 +1,26 @@
+import {
+    object,
+    InferOutput,
+    InferInput,
+} from 'valibot';
+import {
+    optionalBooleanPipe,
+    optionalNumberPipe,
+    optionalStringPipe,
+} from '../helpers/validation/appData';
+
 export enum AppDataKeys {
-    INSTANCE_ID = 'instanceId',
+    instanceId = 'instanceId',
+    instanceName = 'instanceName',
+    instanceEmbeded = 'instanceEmbeded',
 }
 
-export interface AppData {
-    [AppDataKeys.INSTANCE_ID]?: string,
-}
+export const appDataSchema = object({
+    [AppDataKeys.instanceId]: optionalNumberPipe,
+    [AppDataKeys.instanceName]: optionalStringPipe,
+    [AppDataKeys.instanceEmbeded]: optionalBooleanPipe,
+});
+
+export type AppRawData = InferInput<typeof appDataSchema>;
+
+export type AppData = InferOutput<typeof appDataSchema>;

@@ -3,6 +3,8 @@
     "compilerOptions": {
       "incremental": true,
       "checkJs": true,
+      "strict": true,
+      "skipLibCheck": true,
       "types": ["vite/client"],
         "plugins": [
             {
