@@ -1,0 +1,42 @@
+:root {
+    --text-color: #ffc107;
+}
+
+[data-lego-app-wrapper] {
+    --dvl-root-font-size: calc(100vw / 40);
+
+    &:where([hidden]) {
+        display: none;
+    }
+
+    &::placeholder {
+        color: unset;
+    }
+
+    & *,
+    & *::before,
+    & *::after {
+        box-sizing: border-box;
+    }
+
+    & a,
+    & button {
+        cursor: revert;
+    }
+
+    & ol,
+    & ul,
+    & menu {
+        list-style: none;
+    }
+
+    & img {
+        max-inline-size: 100%;
+        max-block-size: 100%;
+    }
+
+    & input,
+    & textarea {
+        user-select: auto;
+    }
+}

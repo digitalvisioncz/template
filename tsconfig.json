@@ -1,0 +1,17 @@
+{
+    "extends": "@dvdevcz/typescript-config",
+    "compilerOptions": {
+      "incremental": true,
+      "checkJs": true,
+      "types": ["vite/client"],
+        "plugins": [
+            {
+              "name": "typescript-plugin-css-modules"
+            }
+        ]
+    },
+    "include": [
+        "./src/**/*",
+        "./vite.config.ts",
+    ],
+}

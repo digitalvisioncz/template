@@ -1,0 +1,5 @@
+.app {
+    display: flex;
+    font-size: calc(var(--dvl-root-font-size) * 6);
+    color: #ffc107;
+}
