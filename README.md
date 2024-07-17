@@ -1,1 +1,1 @@
-# lego-advent-calendar-2024
+# embed-app-vite-react

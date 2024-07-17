@@ -1,16 +1,16 @@
 import config from './configs/app';
 
 const initApp = () => {
-    const currentScriptElement = document.querySelector(`script[data-lego-app-id="${config.embed.id}"]`);
+    const appParentElement = document.querySelector(`[data-dv-app-id="${config.embed.id}"]`);
 
-    if (!currentScriptElement) {
-        throw new Error('Current script element not found');
+    if (!appParentElement) {
+        throw new Error('App parent element not found');
     }
 
     const divElement = document.createElement('div');
 
-    divElement.dataset.legoAppRoot = config.embed.id;
-    document.body.insertBefore(divElement, currentScriptElement.nextSibling);
+    divElement.dataset.dvAppRoot = config.embed.id;
+    document.body.insertBefore(divElement, appParentElement.nextSibling);
 
     const scriptElement = document.createElement('script');
 

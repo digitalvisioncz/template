@@ -3,6 +3,10 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const config = {
     baseUrl,
+    analytics: {
+        sourceId: import.meta.env.VITE_ANALYTICS_SOURCE_ID,
+        endpoint: import.meta.env.VITE_ANALYTICS_ENDPOINT,
+    },
     embed: {
         id: import.meta.env.VITE_APP_ID,
         appScriptType: 'module',
