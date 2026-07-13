@@ -4,6 +4,8 @@
       "incremental": true,
       "checkJs": true,
       "strict": true,
+      "module": "nodenext",
+      "moduleResolution": "nodenext",
       "skipLibCheck": true,
       "types": ["vite/client"],
         "plugins": [
