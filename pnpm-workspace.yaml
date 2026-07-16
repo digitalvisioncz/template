@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: true
+minimumReleaseAgeExclude:
+  - '@dvdevcz/eslint@0.4.1'
+  - '@dvdevcz/stylelint@0.1.1'
+onlyBuiltDependencies:
+  - esbuild

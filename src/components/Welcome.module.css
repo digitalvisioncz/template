@@ -1,0 +1,18 @@
+.welcome {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 2rem;
+}
+
+.title {
+    color: var(--text-color);
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.text {
+    margin: 0;
+    color: var(--text-color);
+}

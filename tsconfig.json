@@ -1,0 +1,29 @@
+{
+    "extends": "@dvdevcz/typescript-config",
+    "compilerOptions": {
+        "strict": true,
+        "skipLibCheck": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "jsxImportSource": "react",
+        "allowJs": true,
+        "checkJs": true,
+        "types": [
+            "astro/client"
+        ]
+    },
+    "include": [
+        "src",
+        ".astro/types.d.ts",
+        "*.d.ts",
+        "*.mts",
+        "*.mjs",
+        "astro.config.mjs",
+        "stylelint.config.cjs",
+    ],
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
+}

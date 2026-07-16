@@ -1,0 +1,12 @@
+---
+import '../styles/global.css';
+
+import Welcome from '../components/Welcome';
+import BaseLayout from '../layouts/Base.astro';
+
+const title = 'Astro + React';
+---
+
+<BaseLayout title={title}>
+    <Welcome client:load />
+</BaseLayout>
