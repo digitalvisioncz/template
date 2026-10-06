@@ -6,10 +6,10 @@
 }
 
 .title {
-    color: var(--text-color);
     margin: 0;
     font-size: 2rem;
     font-weight: 700;
+    color: var(--text-color);
 }
 
 .text {

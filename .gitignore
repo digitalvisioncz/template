@@ -1,4 +1,7 @@
 node_modules
+.moon/cache/
+.moon/docker/
+.pnpm-store/
 dist
 .astro
 .DS_Store

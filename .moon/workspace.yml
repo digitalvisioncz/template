@@ -1,0 +1,7 @@
+$schema: "./cache/schemas/workspace.json"
+
+projects:
+  web: "."
+
+vcs:
+  defaultBranch: "main"

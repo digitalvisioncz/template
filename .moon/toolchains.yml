@@ -1,0 +1,8 @@
+$schema: "./cache/schemas/toolchains.json"
+
+javascript:
+  packageManager: "pnpm"
+  dedupeOnLockfileChange: false
+
+node: {}
+pnpm: {}

@@ -1,0 +1,70 @@
+$schema: "https://moonrepo.dev/schemas/project.json"
+
+tasks:
+  dev:
+    command: "astro dev"
+    preset: "server"
+
+  build:
+    command: "astro build"
+    outputs: ["dist"]
+    options:
+      cache: false
+
+  preview:
+    command: "astro preview"
+    preset: "server"
+
+  check:
+    command: "astro check"
+    options:
+      cache: false
+
+  astro:
+    command: "astro"
+
+  lint:
+    deps: ["lint-oxlint", "lint-eslint", "lint-stylelint"]
+
+  lint-oxlint:
+    command: "oxlint"
+
+  lint-eslint:
+    command: "eslint ."
+
+  lint-stylelint:
+    command: 'stylelint "src/**/*.css" --max-warnings 0'
+
+  lint-fix:
+    deps: ["lint-oxlint-fix", "format"]
+    options:
+      cache: false
+      runInCI: false
+      runDepsInParallel: false
+
+  lint-oxlint-fix:
+    command: "oxlint --fix"
+    options:
+      cache: false
+      runInCI: false
+
+  format:
+    deps: ["format-eslint", "format-stylelint"]
+    options:
+      cache: false
+      runInCI: false
+
+  format-eslint:
+    command: "eslint . --fix"
+    options:
+      cache: false
+      runInCI: false
+
+  format-stylelint:
+    command: 'stylelint "src/**/*.css" --fix'
+    options:
+      cache: false
+      runInCI: false
+
+  format-check:
+    deps: ["lint-eslint", "lint-stylelint"]

@@ -1,0 +1,6 @@
+moon = "2.5.6"
+node = "22.23.3"
+pnpm = "11.23.0"
+
+[settings]
+auto-install = true

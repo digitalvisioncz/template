@@ -1,4 +1,4 @@
-import dvdevEslint from '@dvdevcz/eslint';
+import dvdevEslint from '@dvdevcz/linters/eslint';
 import * as astroParser from 'astro-eslint-parser';
 import astro from 'eslint-plugin-astro';
 import tseslint from 'typescript-eslint';
@@ -15,13 +15,13 @@ export default [
     {
         ignores: [
             '.astro/**',
+            '.moon/**',
             'dist/**',
             'node_modules/**',
         ],
     },
-    ...extendFiles(dvdevEslint.configs.base),
-    ...extendFiles(dvdevEslint.configs.react),
     ...astro.configs.recommended,
+    ...extendFiles(dvdevEslint),
     {
         files: ['**/*.astro'],
         languageOptions: {
@@ -29,7 +29,6 @@ export default [
             parserOptions: {
                 parser: tseslint.parser,
                 extraFileExtensions: ['.astro'],
-                project: './tsconfig.json',
             },
         },
     },

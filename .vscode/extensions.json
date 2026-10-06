@@ -2,6 +2,7 @@
     "recommendations": [
         "astro-build.astro-vscode",
         "dbaeumer.vscode-eslint",
+        "oxc.oxc-vscode",
         "stylelint.vscode-stylelint",
         "editorconfig.editorconfig"
     ]

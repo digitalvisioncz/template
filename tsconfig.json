@@ -20,7 +20,7 @@
         "*.mts",
         "*.mjs",
         "astro.config.mjs",
-        "stylelint.config.cjs",
+        "stylelint.config.js",
     ],
     "exclude": [
         "dist",
