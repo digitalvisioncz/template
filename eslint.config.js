@@ -1,36 +1,45 @@
-import dvdevEslint from '@dvdevcz/eslint';
-import * as astroParser from 'astro-eslint-parser';
-import astro from 'eslint-plugin-astro';
-import tseslint from 'typescript-eslint';
+import astro from "eslint-plugin-astro";
+import * as astroParser from "astro-eslint-parser";
+import tseslint from "typescript-eslint";
 
-const extendFiles = configs => configs.map(config => {
-    if (config.files) {
-        return {...config, files: [...config.files, '**/*.astro']};
-    }
-
-    return config;
-});
+const toArray = (value) => Array.isArray(value) ? value : Object.values(value);
 
 export default [
-    {
-        ignores: [
-            '.astro/**',
-            'dist/**',
-            'node_modules/**',
-        ],
+  {
+    ignores: ["functions/**", "codegen.ts"],
+  },
+  ...toArray(tseslint.configs.recommended).map((config) => ({
+    ...config,
+    rules: {
+      ...config.rules,
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
     },
-    ...extendFiles(dvdevEslint.configs.base),
-    ...extendFiles(dvdevEslint.configs.react),
-    ...astro.configs.recommended,
-    {
-        files: ['**/*.astro'],
-        languageOptions: {
-            parser: astroParser,
-            parserOptions: {
-                parser: tseslint.parser,
-                extraFileExtensions: ['.astro'],
-                project: './tsconfig.json',
-            },
-        },
+  })),
+  ...astro.configs.recommended,
+  {
+    files: ["**/*.astro"],
+    languageOptions: {
+      parser: astroParser,
+      parserOptions: {
+        parser: tseslint.parser,
+        extraFileExtensions: [".astro"],
+        project: ["./tsconfig.json"],
+      },
     },
+    rules: {
+      "astro/no-exports-from-components": "off",
+      "react/no-unknown-property": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-no-undef": "off",
+    },
+  },
+  {
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.json"],
+      },
+    },
+  },
 ];

@@ -1,0 +1,5 @@
+query Product($handle: String!) {
+  product(handle: $handle) {
+    ...ProductFragment
+  }
+}

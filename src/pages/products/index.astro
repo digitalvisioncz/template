@@ -1,0 +1,66 @@
+---
+import Shop from "../../layouts/Shop.astro";
+import { siteConfig } from "../../lib/config";
+import { shopifyQuery } from "../../lib/shopify/index";
+import { GET_PRODUCTS } from "../../lib/shopify/queries/shop";
+import ProductCard from "../../components/shopify/ProductCard";
+
+let products: any[] = [];
+let pageInfo: any = { hasNextPage: false, endCursor: "" };
+
+try {
+  const url = new URL(Astro.url);
+  const q = url.searchParams.get("q") || "";
+  const sort = url.searchParams.get("sort") || "CREATED";
+  const res = await shopifyQuery<{ products: { edges: { node: any }[] }; pageInfo: any }>({
+    query: GET_PRODUCTS,
+    variables: {
+      first: 24,
+      query: q ? `title:*${q}*` : undefined,
+      sortKey: sort || "CREATED",
+      reverse: true,
+    },
+  });
+  products = res.products?.edges?.map((e) => e.node).filter(Boolean) || [];
+  pageInfo = res.pageInfo || { hasNextPage: false, endCursor: "" };
+} catch (e) {
+  console.error("Products page fetch failed:", e);
+}
+---
+
+<Shop title="Products">
+  <div class="page">
+    <div class="container">
+      <h1>Products</h1>
+      <div class="toolbar">
+        <form method="get">
+          <input type="text" name="q" placeholder="Search..." defaultValue={Astro.url.searchParams.get("q") || ""} />
+          <select name="sort">
+            <option value="CREATED" selected={Astro.url.searchParams.get("sort") !== "TITLE"}>Newest</option>
+            <option value="TITLE" selected={Astro.url.searchParams.get("sort") === "TITLE"}>A-Z</option>
+          </select>
+          <button type="submit">Filter</button>
+        </form>
+      </div>
+      {products.length === 0 ? (
+        <p>No products found.</p>
+      ) : (
+        <div class="product-grid">
+          {products.map((product) => (
+            <ProductCard product={product} />
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</Shop>
+
+<style>
+  .page { padding: var(--space-8) var(--space-4); }
+  h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-6); }
+  .toolbar form { display: flex; gap: var(--space-3); margin-bottom: var(--space-6); }
+  input, select { padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); background-color: var(--color-surface-raised); color: var(--color-text); }
+  button[type="submit"] { padding: var(--space-2) var(--space-4); background-color: var(--color-accent); color: var(--color-accent-text); border-radius: var(--radius-md); font-weight: 600; }
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: var(--space-6); }
+  .container { max-width: var(--container-max); margin: 0 auto; }
+</style>

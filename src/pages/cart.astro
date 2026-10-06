@@ -1,0 +1,38 @@
+---
+import Shop from "../layouts/Shop.astro";
+import { siteConfig } from "../lib/config";
+
+const title = "Cart";
+const cart = Astro.locals.cart || null;
+---
+
+<Shop title={title} cart={cart}>
+  <div class="page">
+    <div class="container">
+      <h1>Cart</h1>
+      {!cart || cart.lines.length === 0 ? (
+        <p>Your cart is empty.</p>
+      ) : (
+        <div class="cart-lines">
+          {cart.lines.map((line) => (
+            <div key={line.id} class="cart-line">
+              <span>{line.merchandise.title}</span>
+              <span>Qty: {line.quantity}</span>
+              <span>
+                {line.cost.totalAmount.amount} {line.cost.totalAmount.currencyCode}
+              </span>
+              <a href={cart.checkoutUrl}>Checkout</a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</Shop>
+
+<style>
+  .page { padding: var(--space-8) var(--space-4); }
+  .cart-lines { display: flex; flex-direction: column; gap: var(--space-4); }
+  .cart-line { display: flex; justify-content: space-between; padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+  .container { max-width: var(--container-max); margin: 0 auto; }
+</style>

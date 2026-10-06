@@ -1,0 +1,41 @@
+---
+import Base from "./Base.astro";
+import type { ShopifyData } from "../lib/shopify/types";
+
+interface Props {
+  title: string;
+  shop?: any;
+  menu?: any;
+  cart?: any;
+  children?: any;
+}
+
+const { title, shop, menu, cart, children } = Astro.props;
+---
+
+<Base title={title}>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">{shop?.name || "Store"}</a>
+      <nav class="main-nav">
+        {menu?.items?.map((item) => (
+          <a href={item.url} key={item.title}>{item.title}</a>
+        ))}
+      </nav>
+      <div class="header-actions">
+        <a href="/search" aria-label="Search">Search</a>
+        <a href="/cart" aria-label="Cart">
+          Cart {cart?.totalQuantity ? `(${cart.totalQuantity})` : ""}
+        </a>
+      </div>
+    </div>
+  </header>
+  <main>
+    {children}
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; {new Date().getFullYear()} {shop?.name || "Store"}. All rights reserved.</p>
+    </div>
+  </footer>
+</Base>

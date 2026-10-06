@@ -1,0 +1,19 @@
+---
+import Shop from "../layouts/Shop.astro";
+
+const title = "About Us";
+---
+
+<Shop title={title}>
+  <div class="page">
+    <div class="container">
+      <h1>About Us</h1>
+      <p>This is a bootstrap Astro + Shopify storefront built with CSS Modules and Apollo Client.</p>
+    </div>
+  </div>
+</Shop>
+
+<style>
+  .page { padding: var(--space-8) var(--space-4); }
+  .container { max-width: var(--container-max); margin: 0 auto; }
+</style>

@@ -1,0 +1,19 @@
+query Pages {
+  pages(first: 100) {
+    edges {
+      node {
+        id
+        handle
+        title
+        body
+        bodySummary
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

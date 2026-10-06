@@ -1,0 +1,31 @@
+{
+  "site": {
+    "title": "Template Shopify",
+    "description": "Astro + Shopify Bootstrap",
+    "base_url": "http://localhost:4321",
+    "base_path": "/"
+  },
+  "shopify": {
+    "currencySymbol": "Kč",
+    "currencyCode": "CZK",
+    "collections": {
+      "hero_slider": "hidden-homepage-carousel",
+      "featured_products": "featured-products"
+    }
+  },
+  "settings": {
+    "search": true,
+    "theme_switcher": false,
+    "default_theme": "light"
+  },
+  "navigation_button": {
+    "enable": true,
+    "label": "Get Started",
+    "link": "https://github.com/your-repo"
+  },
+  "metadata": {
+    "meta_author": "",
+    "meta_description": "",
+    "meta_image": ""
+  }
+}

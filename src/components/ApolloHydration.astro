@@ -1,0 +1,11 @@
+---
+interface Props {
+  cache: string;
+}
+
+const { cache } = Astro.props;
+---
+
+<script>
+  window.__APOLLO_STATE__ = { "apollo.cache": JSON.parse(decodeURIComponent(cache)) };
+</script>

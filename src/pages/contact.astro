@@ -1,0 +1,38 @@
+---
+import Shop from "../layouts/Shop.astro";
+
+const title = "Contact";
+---
+
+<Shop title={title}>
+  <div class="page">
+    <div class="container">
+      <h1>Contact</h1>
+      <form method="post" class="contact-form">
+        <label>
+          <span>Name</span>
+          <input type="text" name="name" required />
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          <span>Message</span>
+          <textarea name="message" rows="5" required />
+        </label>
+        <button type="submit" className="button primary">Send</button>
+      </form>
+    </div>
+  </div>
+</Shop>
+
+<style>
+  .page { padding: var(--space-8) var(--space-4); }
+  .contact-form { display: flex; flex-direction: column; gap: var(--space-4); max-width: 32rem; }
+  label { display: flex; flex-direction: column; gap: var(--space-1); }
+  label span { font-size: 0.875rem; font-weight: 600; }
+  input, textarea { padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-raised); }
+  .page button[type="submit"] { align-self: flex-start; padding: var(--space-2) var(--space-4); background: var(--color-accent); color: var(--color-accent-text); border-radius: var(--radius-md); font-weight: 600; }
+  .container { max-width: var(--container-max); margin: 0 auto; }
+</style>

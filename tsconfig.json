@@ -9,8 +9,13 @@
         "jsxImportSource": "react",
         "allowJs": true,
         "checkJs": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"]
+        },
         "types": [
-            "astro/client"
+            "astro/client",
+            "cloudflare:workers"
         ]
     },
     "include": [
@@ -21,6 +26,7 @@
         "*.mjs",
         "astro.config.mjs",
         "stylelint.config.cjs",
+        "codegen.ts"
     ],
     "exclude": [
         "dist",

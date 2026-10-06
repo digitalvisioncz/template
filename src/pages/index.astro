@@ -1,12 +1,173 @@
 ---
-import '../styles/global.css';
+import Shop from "../layouts/Shop.astro";
+import { siteConfig } from "../lib/config";
+import { shopifyQuery } from "../lib/shopify/index";
+import { GET_PRODUCTS, GET_COLLECTIONS, GET_SHOP } from "../lib/shopify/queries";
+import type { Product, Collection } from "../lib/shopify/types";
 
-import Welcome from '../components/Welcome';
-import BaseLayout from '../layouts/Base.astro';
+const heroQuery = `#graphql
+query HeroProducts($query: String!) {
+  products(first: 5, query: $query) {
+    edges { node { id handle title featuredImage { id url altText width height } priceRange { minVariantPrice { amount currencyCode } } } }
+  }
+}`;
 
-const title = 'Astro + React';
+const featuredQuery = `#graphql
+query FeaturedProducts($query: String!) {
+  products(first: 12, query: $query) {
+    edges { node { id handle title featuredImage { id url altText width height } priceRange { minVariantPrice { amount currencyCode } } compareAtPriceRange { minVariantPrice { amount currencyCode } } vendor } }
+    pageInfo { hasNextPage endCursor }
+  }
+}`;
+
+let shop: any = null;
+let collections: Collection[] = [];
+let heroProducts: Product[] = [];
+let featuredProducts: Product[] = [];
+let pageInfo: any = { hasNextPage: false, endCursor: "" };
+
+try {
+  const [shopRes, collectionsRes, heroRes, featuredRes] = await Promise.all([
+    shopifyQuery<{ shop: any }>({ query: GET_SHOP }),
+    shopifyQuery<{ collections: { edges: { node: Collection }[] } }>({ query: GET_COLLECTIONS }),
+    shopifyQuery<{ products: { edges: { node: Product }[] } }>({
+      query: heroQuery,
+      variables: { query: `tag:${siteConfig.collections.heroSlider}` },
+    }),
+    shopifyQuery<{ products: { edges: { node: Product }[] }; pageInfo: any }>({
+      query: featuredQuery,
+      variables: { query: `tag:${siteConfig.collections.featuredProducts}` },
+    }),
+  ]);
+  shop = shopRes.shop;
+  collections = collectionsRes.collections?.edges?.map((e) => e.node).filter(Boolean) || [];
+  heroProducts = heroRes.products?.edges?.map((e) => e.node).filter(Boolean) || [];
+  featuredProducts = featuredRes.products?.edges?.map((e) => e.node).filter(Boolean) || [];
+  pageInfo = featuredRes.pageInfo || { hasNextPage: false, endCursor: "" };
+} catch (e) {
+  console.error("Homepage data fetch failed:", e);
+}
 ---
 
-<BaseLayout title={title}>
-    <Welcome client:load />
-</BaseLayout>
+<Shop title={siteConfig.title} shop={shop}>
+  <section class="hero">
+    <div class="container">
+      <h1>{siteConfig.title}</h1>
+      <p>{siteConfig.description}</p>
+    </div>
+  </section>
+
+  {heroProducts.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2>Featured</h2>
+        <div class="product-grid">
+          {heroProducts.map((product) => (
+            <ProductCard product={product} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {featuredProducts.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2>New Arrivals</h2>
+        <div class="product-grid">
+          {featuredProducts.map((product) => (
+            <ProductCard product={product} />
+          ))}
+        </div>
+        {pageInfo.hasNextPage && (
+          <div class="load-more">
+            <button>Load more</button>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {collections.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2>Collections</h2>
+        <div class="collection-grid">
+          {collections.map((collection) => (
+            <a href={`/collections/${collection.handle}`} class="collection-card">
+              {collection.image && (
+                <img src={collection.image.url} alt={collection.image.altText || collection.title} />
+              )}
+              <h3>{collection.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Shop>
+
+<style>
+  .hero {
+    padding: var(--space-16) var(--space-4);
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .hero p {
+    margin-top: var(--space-4);
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .section {
+    padding: var(--space-12) var(--space-4);
+  }
+  .section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: var(--space-6);
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-6);
+  }
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: var(--space-6);
+  }
+  .collection-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+  .collection-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+  .collection-card h3 { font-size: 1rem; font-weight: 600; padding: var(--space-3) var(--space-4); }
+  .load-more {
+    margin-top: var(--space-8);
+    text-align: center;
+  }
+  .load-more button {
+    padding: var(--space-2) var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  .container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+  }
+</style>

@@ -1,0 +1,5 @@
+query Collection($handle: String!) {
+  collection(handle: $handle) {
+    ...CollectionFragment
+  }
+}

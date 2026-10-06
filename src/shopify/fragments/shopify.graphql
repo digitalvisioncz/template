@@ -1,0 +1,101 @@
+fragment ImageFragment on Image {
+  id
+  url
+  altText
+  width
+  height
+}
+
+fragment ProductVariantFragment on ProductVariant {
+  id
+  title
+  availableForSale
+  price {
+    amount
+    currencyCode
+  }
+  compareAtPrice {
+    amount
+    currencyCode
+  }
+  selectedOptions {
+    name
+    value
+  }
+  image {
+    ...ImageFragment
+  }
+  sku
+  quantityAvailable
+}
+
+fragment ProductFragment on Product {
+  id
+  handle
+  title
+  description
+  options {
+    id
+    name
+    values
+  }
+  priceRange {
+    minVariantPrice {
+      amount
+      currencyCode
+    }
+    maxVariantPrice {
+      amount
+      currencyCode
+    }
+  }
+  compareAtPriceRange {
+    minVariantPrice {
+      amount
+      currencyCode
+    }
+    maxVariantPrice {
+      amount
+      currencyCode
+    }
+  }
+  featuredImage {
+    ...ImageFragment
+  }
+  images(first: 20) {
+    edges {
+      node {
+        ...ImageFragment
+      }
+    }
+  }
+  variants(first: 100) {
+    edges {
+      node {
+        ...ProductVariantFragment
+      }
+    }
+  }
+  tags
+  productType
+  vendor
+  publishedAt
+  updatedAt
+}
+
+fragment CollectionFragment on Collection {
+  id
+  handle
+  title
+  description
+  image {
+    ...ImageFragment
+  }
+  products(first: 20) {
+    edges {
+      node {
+        ...ProductFragment
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+---
+import Shop from "../../layouts/Shop.astro";
+import { shopifyQuery } from "../../lib/shopify/index";
+import { GET_PRODUCT } from "../../lib/shopify/queries/product";
+import type { Product } from "../../lib/shopify/types";
+import ProductCard from "../../components/shopify/ProductCard";
+
+let product: Product | null = null;
+
+try {
+  const handle = Astro.params.handle;
+  if (handle) {
+    const res = await shopifyQuery<{ product: Product }>({ query: GET_PRODUCT, variables: { handle } });
+    product = res.product || null;
+  }
+} catch (e) {
+  console.error("Product page fetch failed:", e);
+}
+
+if (!product) {
+  return Astro.redirect("/404");
+}
+---
+
+<Shop title={product.title}>
+  <div class="page">
+    <div class="container">
+      <div class="product">
+        <div class="media">
+          {product.featuredImage && (
+            <img src={product.featuredImage.url} alt={product.featuredImage.altText || product.title} />
+          )}
+        </div>
+        <div class="details">
+          <h1>{product.title}</h1>
+          <p class="vendor">{product.vendor}</p>
+          <div class="price">
+            <span class="current">
+              {product.priceRange.minVariantPrice.amount} {product.priceRange.minVariantPrice.currencyCode}
+            </span>
+            {product.compareAtPriceRange?.minVariantPrice && (
+              <span class="compare">
+                {product.compareAtPriceRange.minVariantPrice.amount} {product.compareAtPriceRange.minVariantPrice.currencyCode}
+              </span>
+            )}
+          </div>
+          <p class="description">{product.description}</p>
+        </div>
+      </div>
+      {product.variants.length > 0 && (
+        <div class="related">
+          <h2>You may also like</h2>
+          <div class="product-grid">
+            {product.variants.slice(0, 4).map((variant) => (
+              <ProductCard product={product as any} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</Shop>
+
+<style>
+  .page { padding: var(--space-8) var(--space-4); }
+  .product { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+  @media (min-width: 768px) {
+    .product { grid-template-columns: 1fr 1fr; }
+  }
+  .media img { width: 100%; border-radius: var(--radius-lg); }
+  .details h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-2); }
+  .vendor { color: var(--color-text-secondary); margin-bottom: var(--space-4); }
+  .price { display: flex; gap: var(--space-3); margin-bottom: var(--space-6); font-size: 1.125rem; font-weight: 700; }
+  .compare { color: var(--color-text-muted); text-decoration: line-through; font-weight: 400; }
+  .description { color: var(--color-text-secondary); line-height: 1.7; }
+  .related { margin-top: var(--space-16); }
+  .related h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: var(--space-6); }
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: var(--space-6); }
+  .container { max-width: var(--container-max); margin: 0 auto; }
+</style>

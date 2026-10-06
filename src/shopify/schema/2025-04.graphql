@@ -1,0 +1,383 @@
+# Shopify Storefront API Schema Snapshot
+#
+# This file is a committed snapshot of the Shopify Storefront API schema
+# used by graphql-codegen to produce typed operations.
+#
+# To refresh this snapshot after upgrading the pinned API version,
+# run:
+#   pnpm schema:download
+#
+# The download script uses Shopify's /admin/api/2025-04/graphql.json endpoint
+# with your private access token and overwrites this file.
+
+type Query {
+  shop: Shop!
+  product(id: ID!): Product
+  products(first: Int, after: String, query: String, sortKey: ProductSortKeys, reverse: Boolean): ProductConnection!
+  collection(handle: String!): Collection
+  collections(first: Int, after: String): CollectionConnection!
+  menu(handle: String!): Menu
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]!
+  cart(id: ID!): Cart
+}
+
+type Mutation {
+  cartCreate(input: CartInput!): CartCreatePayload!
+  cartLinesAdd(cartId: ID!, lines: [CartLineInput!]!): CartLinesAddPayload!
+  cartLinesRemove(cartId: ID!, lineIds: [ID!]!): CartLinesRemovePayload!
+  cartLinesUpdate(cartId: ID!, lines: [CartLineUpdateInput!]!): CartLinesUpdatePayload!
+  customerCreate(input: CustomerCreateInput!): CustomerCreatePayload!
+  customerAccessTokenCreate(input: CustomerAccessTokenCreateInput!): CustomerAccessTokenCreatePayload!
+  customer(customerAccessToken: String!): CustomerPayload
+}
+
+type Cart implements Node {
+  id: ID!
+  checkoutUrl: String!
+  totalQuantity: Int!
+  lines(first: Int, after: String): CartLineConnection!
+  cost: CartCost!
+  buyerIdentity: CartBuyerIdentity
+}
+
+type CartLine implements Node {
+  id: ID!
+  quantity: Int!
+  attributes: [Attribute!]!
+  merchandise: Merchandise!
+  cost: CartLineCost!
+}
+
+type CartLineConnection {
+  edges: [CartLineEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CartLineEdge {
+  cursor: String!
+  node: CartLine!
+}
+
+type CartCost {
+  subtotalAmount: MoneyBag!
+  totalAmount: MoneyBag!
+  totalTaxAmount: MoneyBag
+}
+
+type CartLineCost {
+  totalAmount: MoneyBag!
+}
+
+type CartBuyerIdentity {
+  email: String
+  phone: String
+  customer: Customer
+}
+
+type Merchandise {
+  id: ID!
+  title: String!
+  selectedOptions: [SelectedOption!]!
+}
+
+type ProductVariant implements Node {
+  id: ID!
+  title: String!
+  availableForSale: Boolean!
+  price: MoneyV2!
+  compareAtPrice: MoneyV2
+  selectedOptions: [SelectedOption!]!
+  image: Image
+  sku: String
+  quantityAvailable: Int
+}
+
+type SelectedOption {
+  name: String!
+  value: String!
+}
+
+type Product implements Node {
+  id: ID!
+  handle: String!
+  title: String!
+  description: String!
+  descriptionHtml: String!
+  options: [ProductOption!]!
+  priceRange: ProductPriceRange!
+  compareAtPriceRange: ProductPriceRange
+  featuredImage: Image
+  images(first: Int, after: String): ImageConnection!
+  variants(first: Int, after: String): ProductVariantConnection!
+  tags: [String!]!
+  productType: String
+  vendor: String
+  publishedAt: DateTime
+  updatedAt: DateTime
+}
+
+type ProductConnection {
+  edges: [ProductEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProductEdge {
+  cursor: String!
+  node: Product!
+}
+
+type ProductVariantConnection {
+  edges: [ProductVariantEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProductVariantEdge {
+  cursor: String!
+  node: ProductVariant!
+}
+
+type ProductOption {
+  id: ID!
+  name: String!
+  values: [String!]!
+}
+
+type ProductPriceRange {
+  minVariantPrice: MoneyV2!
+  maxVariantPrice: MoneyV2!
+}
+
+type Image implements Node {
+  id: ID!
+  url: String!
+  altText: String
+  width: Int
+  height: Int
+}
+
+type ImageConnection {
+  edges: [ImageEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ImageEdge {
+  cursor: String!
+  node: Image!
+}
+
+type Collection implements Node {
+  id: ID!
+  handle: String!
+  title: String!
+  description: String
+  image: Image
+  products(first: Int, after: String, sortKey: ProductSortKeys, reverse: Boolean): ProductConnection!
+}
+
+type CollectionConnection {
+  edges: [CollectionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CollectionEdge {
+  cursor: String!
+  node: Collection!
+}
+
+type Menu implements Node {
+  id: ID!
+  items: [MenuItem!]!
+}
+
+type MenuItem {
+  title: String!
+  url: String!
+}
+
+type Shop {
+  name: String!
+  description: String
+  primaryDomain: Domain
+}
+
+type Domain {
+  url: String!
+  host: String!
+}
+
+type Customer implements Node {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  phone: String
+  acceptsMarketing: Boolean
+}
+
+type Page implements Node {
+  id: ID!
+  handle: String!
+  title: String!
+  body: String
+  bodySummary: String
+}
+
+type PageConnection {
+  edges: [PageEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PageEdge {
+  cursor: String!
+  node: Page!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type MoneyV2 {
+  amount: String!
+  currencyCode: CurrencyCode!
+}
+
+type MoneyBag {
+  amount: String!
+  currencyCode: CurrencyCode!
+}
+
+type Attribute {
+  key: String!
+  value: String!
+}
+
+enum CurrencyCode {
+  USD
+  EUR
+  GBP
+  CAD
+  AUD
+  DKK
+  NOK
+  SEK
+  ILS
+  CHF
+  HKD
+  SGD
+  CNY
+  JPY
+  INR
+  MXN
+  BRL
+  TWD
+  THB
+  VND
+  MYR
+  PHP
+  IDR
+  NZD
+  AED
+  ZAR
+}
+
+enum ProductSortKeys {
+  TITLE
+  PRICE
+  BEST_SELLING
+  CREATED
+  RELEVANCE
+  ID
+}
+
+type Node {
+  id: ID!
+}
+
+scalar DateTime
+
+input CartInput {
+  lines: [CartLineInput!]!
+  attributes: [AttributeInput!]
+  discountCodes: [String!]
+  note: String
+}
+
+input CartLineInput {
+  merchandiseId: ID!
+  quantity: Int!
+  attributes: [AttributeInput!]
+}
+
+input CartLineUpdateInput {
+  id: ID!
+  merchandiseId: ID
+  quantity: Int
+  attributes: [AttributeInput!]
+}
+
+input AttributeInput {
+  key: String!
+  value: String!
+}
+
+input CustomerAccessTokenCreateInput {
+  email: String!
+  password: String!
+}
+
+input CustomerCreateInput {
+  email: String!
+  password: String!
+  firstName: String
+  lastName: String
+  phone: String
+  acceptsMarketing: Boolean
+}
+
+type CartCreatePayload {
+  cart: Cart!
+  userErrors: [UserError!]!
+}
+
+type CartLinesAddPayload {
+  cart: Cart!
+  userErrors: [UserError!]!
+}
+
+type CartLinesRemovePayload {
+  cart: Cart!
+  userErrors: [UserError!]!
+}
+
+type CartLinesUpdatePayload {
+  cart: Cart!
+  userErrors: [UserError!]!
+}
+
+type CustomerCreatePayload {
+  customer: Customer
+  customerUserErrors: [UserError!]!
+}
+
+type CustomerAccessTokenCreatePayload {
+  customerAccessToken: CustomerAccessToken
+  customerUserErrors: [UserError!]!
+}
+
+type CustomerAccessToken {
+  accessToken: String!
+  expiresAt: DateTime!
+}
+
+type CustomerPayload {
+  customer: Customer
+}
+
+type UserError {
+  field: [String!]
+  message: String!
+}
